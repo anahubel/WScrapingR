@@ -15,9 +15,9 @@ Documento para pruebas interactivas de scraping a la página imdb.
 
 # Código
 
-```{r}
+```{r warning=FALSE, include=FALSE}
 # Carga librerias
-PACKAGES <- c()
+PACKAGES <- c("dplyr", "rvest", "ggplot2", "tibble", "knitr", "stringr")
 
 # En caso de no tenerlas instaladas, se descargarlas
 inst <- match(PACKAGES, .packages(all=TRUE))
@@ -30,8 +30,34 @@ lapply(PACKAGES, require, character.only=T)
 
 
 ```{r}
+target_url <- "https://www.imdb.com/search/title/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p=b9121fa8-b7bb-4a3e-8887-aab822e0b5a7&pf_rd_r=2QJ4PXH016X1D5KXRN0K&pf_rd_s=right-6&pf_rd_t=15506&pf_rd_i=moviemeter&ref_=chtmvm_gnr_21&genres=thriller&explore=title_type,genres"
 
-
-
+target_page <- read_html(target_url)
 ```
+
+Xpaths del titulo de la película:
+
+* Relativo //*[@id="main"]/div/div[3]/div/div[1]/div[3]/h3/a
+* Completo: /html/body/div[3]/div/div[2]/div[3]/div[1]/div/div[3]/div/div[1]/div[3]/h3/a
+
+
+```{r}
+# Nombre pelicula
+nombre_peli <- target_page %>% html_nodes(xpath = "/html/body/div[3]/div/div[2]/div[3]/div[1]/div/div[3]/div/div[1]/div[3]/h3/a") %>% html_text()
+nombre_peli
+```
+
+Prueba para automatizar y sacarlos todos juntos
+
+```{r}
+target <- target_page %>% html_nodes(xpath = "/html/body/div[3]/div/div[2]/div[3]/div[1]/div/div[3]/div")
+target
+```
+
+
+```{r}
+titulos <- target %>% html_nodes("div.lister-item-content")
+titulos
+```
+
 
