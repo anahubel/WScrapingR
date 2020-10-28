@@ -1,0 +1,37 @@
+---
+title: "PRAC1 Pruebas Scraping imdb"
+author: "jperezord & anahubel"
+date: "28/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Intro
+
+Documento para pruebas interactivas de scraping a la página imdb.
+
+# Código
+
+```{r}
+# Carga librerias
+PACKAGES <- c()
+
+# En caso de no tenerlas instaladas, se descargarlas
+inst <- match(PACKAGES, .packages(all=TRUE))
+need <- which(is.na(inst))
+if (length(need) > 0) install.packages(PACKAGES[need], repos = "http://cran.us.r-project.org")
+
+# Cargamos las librerías
+lapply(PACKAGES, require, character.only=T)
+```
+
+
+```{r}
+
+
+
+```
+
