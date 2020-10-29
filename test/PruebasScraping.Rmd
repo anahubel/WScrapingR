@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Documento para pruebas interactivas de scraping a la página imdb.
 
-# Código
+# Carga página
 
 ```{r warning=FALSE, include=FALSE}
 # Carga librerias
@@ -35,29 +35,135 @@ target_url <- "https://www.imdb.com/search/title/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p
 target_page <- read_html(target_url)
 ```
 
+
+
+# Nombre peliculas y series
+
+```{r}
+
+target_nombre <- target_page %>% html_nodes(xpath = '//*[@id="main"]/div/div[3]/div/div/div')
+nombre_peliculas <- target_nombre %>% html_nodes("h3.lister-item-header") %>% html_nodes("a") %>% html_text()
+nombre_peliculas
+```
+
+# Año película
+
+```{r}
+target_anio <- target_page %>% html_nodes(xpath = '//*[@id="main"]/div/div[3]/div/div/div')
+anio_peliculas <- target_anio %>% html_nodes("h3.lister-item-header") %>% html_nodes("span.lister-item-year") %>% html_text()
+anio_peliculas
+```
+
+
+# Edad recomendada
+
+OJO que devuelve 45 resultados. Estudiar que pasa cuando no hay datos
+
+```{r}
+
+target_edad <- target_page %>% html_nodes(xpath = '//*[@id="main"]/div/div[3]/div/div/div')
+edad_peliculas <- target_edad %>% html_nodes("p.text-muted") %>% html_nodes("span.certificate") %>% html_text()
+edad_peliculas
+```
+
+
+# Duracion peliculas
+
+OJO que devuelve 42 resultados. Estudiar que pasa cuando no hay datos
+
+```{r}
+
+target_duracion <- target_page %>% html_nodes(xpath = '//*[@id="main"]/div/div[3]/div/div/div')
+duracion_peliculas <- target_duracion %>% html_nodes("p.text-muted") %>% html_nodes("span.runtime") %>% html_text()
+duracion_peliculas
+```
+
+# Generos películas
+
+```{r}
+target_genero <- target_page %>% html_nodes(xpath = '//*[@id="main"]/div/div[3]/div/div/div')
+genero_peliculas <- target_genero %>% html_nodes("p.text-muted") %>% html_nodes("span.genre") %>% html_text()
+genero_peliculas
+```
+
+# Puntuacion
+
+OJO que devuelve 48 resultados. Estudiar que pasa cuando no hay datos
+
+```{r}
+target_puntuacion <- target_page %>% html_nodes(xpath = '//*[@id="main"]/div/div[3]/div/div/div')
+puntuacion_peliculas <- target_puntuacion %>% html_nodes("div.ratings-bar") %>% html_nodes("div.inline-block") %>% html_nodes("strong") %>% html_text()
+puntuacion_peliculas
+```
+
+
+
+
+# Descripción películas (REVISAR)
+
+
+```{r}
+target_descrip <- target_page %>% html_nodes(xpath = '//*[@id="main"]/div/div[3]/div/div/div')
+descrip_peliculas <- target_descrip %>% html_nodes("p.text-muted") %>% html_nodes("span.genre") %>% html_text()
+head(descrip_peliculas)
+```
+
+
+# Numero de votos (REVISAR)
+
+```{r}
+target_votos <- target_page %>% html_nodes(xpath = '//*[@id="main"]/div/div[3]/div/div/div')
+votos_peliculas <- target_votos %>% html_nodes("p.sort-num_votes-visible") %>% html_nodes("span") %>% html_text()
+votos_peliculas
+```
+
+
+
+
+# Opciones alternativas
+
+Si fallase lo anterior, se podría hacer mediante bucles.
+Problema: me da fallo si no existe ese datos, por lo que habría que hacer mucha limpieza
+
+Se basa en:
+
 Xpaths del titulo de la película:
 
 * Relativo //*[@id="main"]/div/div[3]/div/div[1]/div[3]/h3/a
 * Completo: /html/body/div[3]/div/div[2]/div[3]/div[1]/div/div[3]/div/div[1]/div[3]/h3/a
 
-
 ```{r}
-# Nombre pelicula
-nombre_peli <- target_page %>% html_nodes(xpath = "/html/body/div[3]/div/div[2]/div[3]/div[1]/div/div[3]/div/div[1]/div[3]/h3/a") %>% html_text()
-nombre_peli
-```
-
-Prueba para automatizar y sacarlos todos juntos
-
-```{r}
-target <- target_page %>% html_nodes(xpath = "/html/body/div[3]/div/div[2]/div[3]/div[1]/div/div[3]/div")
-target
+peli <- target_page %>% html_nodes(xpath = '//*[@id="main"]/div/div[3]/div/div[1]/div[3]/h3/a') %>% html_text()
+peli
 ```
 
 
 ```{r}
-titulos <- target %>% html_nodes("div.lister-item-content")
-titulos
+nombre_peliculas <- c()
+anio_peliculas <- c()
+duracion_peliculas <- c()
+tags_peliculas <- c()
+
+for(i in 1:50){
+        # Extracción películas
+        path_comun <- '//*[@id="main"]/div/div[3]/div/div['
+        path_esp_peli <- ']/div[3]/h3/a'
+        path_peliculas <- paste(path_comun, i, path_esp_peli, sep = "")
+        
+        peli <- target_page %>% html_nodes(xpath = path_peliculas) %>% html_text()
+        nombre_peliculas <- append(nombre_peliculas, peli)
+        
+        # Extracción años
+        path_anio <- ']/div[3]/h3/span[2]'
+        path_esp_anio <- paste(path_comun, i, path_anio, sep = "")
+        
+        anio <- target_page %>% html_nodes(xpath = path_esp_anio) %>% html_text()
+        anio_peliculas <- append(anio_peliculas, anio)
+
+}
+nombre_peliculas
+anio_peliculas
 ```
+
 
 

@@ -421,49 +421,309 @@ summary {
 <h1>Intro</h1>
 <p>Documento para pruebas interactivas de scraping a la página imdb.</p>
 </div>
-<div id="código" class="section level1">
-<h1>Código</h1>
+<div id="carga-página" class="section level1">
+<h1>Carga página</h1>
 <pre class="r"><code>target_url &lt;- &quot;https://www.imdb.com/search/title/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=b9121fa8-b7bb-4a3e-8887-aab822e0b5a7&amp;pf_rd_r=2QJ4PXH016X1D5KXRN0K&amp;pf_rd_s=right-6&amp;pf_rd_t=15506&amp;pf_rd_i=moviemeter&amp;ref_=chtmvm_gnr_21&amp;genres=thriller&amp;explore=title_type,genres&quot;
 
 target_page &lt;- read_html(target_url)</code></pre>
+</div>
+<div id="nombre-peliculas-y-series" class="section level1">
+<h1>Nombre peliculas y series</h1>
+<pre class="r"><code>target_nombre &lt;- target_page %&gt;% html_nodes(xpath = &#39;//*[@id=&quot;main&quot;]/div/div[3]/div/div/div&#39;)
+nombre_peliculas &lt;- target_nombre %&gt;% html_nodes(&quot;h3.lister-item-header&quot;) %&gt;% html_nodes(&quot;a&quot;) %&gt;% html_text()
+nombre_peliculas</code></pre>
+<pre><code>##  [1] &quot;La maldición de Bly Manor&quot;                 
+##  [2] &quot;El juicio de los 7 de Chicago&quot;             
+##  [3] &quot;Rebeca&quot;                                    
+##  [4] &quot;La maldición de Hill House&quot;                
+##  [5] &quot;Fargo&quot;                                     
+##  [6] &quot;Mirzapur&quot;                                  
+##  [7] &quot;Ratched&quot;                                   
+##  [8] &quot;The Walking Dead&quot;                          
+##  [9] &quot;Territorio Lovecraft&quot;                      
+## [10] &quot;Sobrenatural&quot;                              
+## [11] &quot;La Revolución&quot;                             
+## [12] &quot;Salvaje&quot;                                   
+## [13] &quot;El diablo a todas horas&quot;                   
+## [14] &quot;Dexter&quot;                                    
+## [15] &quot;Roadkill&quot;                                  
+## [16] &quot;Raised by Wolves&quot;                          
+## [17] &quot;Stranger Things&quot;                           
+## [18] &quot;American Horror Story&quot;                     
+## [19] &quot;Hacia el lago&quot;                             
+## [20] &quot;Evil&quot;                                      
+## [21] &quot;Breaking Bad&quot;                              
+## [22] &quot;The Blacklist&quot;                             
+## [23] &quot;Mentes criminales&quot;                         
+## [24] &quot;Fear the Walking Dead&quot;                     
+## [25] &quot;Sinister&quot;                                  
+## [26] &quot;The Empty Man&quot;                             
+## [27] &quot;El tercer día&quot;                             
+## [28] &quot;Honest Thief&quot;                              
+## [29] &quot;Rebeca&quot;                                    
+## [30] &quot;Utopia&quot;                                    
+## [31] &quot;Apocalipsis&quot;                               
+## [32] &quot;Crónicas vampíricas&quot;                       
+## [33] &quot;Navy: Investigación criminal&quot;              
+## [34] &quot;El engaño&quot;                                 
+## [35] &quot;Black Mirror&quot;                              
+## [36] &quot;Ley y orden: Unidad de víctimas especiales&quot;
+## [37] &quot;Hijos de la anarquía&quot;                      
+## [38] &quot;La noche de Halloween&quot;                     
+## [39] &quot;The Flight Attendant&quot;                      
+## [40] &quot;Tremors: Shrieker Island&quot;                  
+## [41] &quot;Dark&quot;                                      
+## [42] &quot;Alguien tiene que morir&quot;                   
+## [43] &quot;El hombre invisible&quot;                       
+## [44] &quot;You&quot;                                       
+## [45] &quot;The Undoing&quot;                               
+## [46] &quot;Puñales por la espalda&quot;                    
+## [47] &quot;Ozark&quot;                                     
+## [48] &quot;La casa de papel&quot;                          
+## [49] &quot;El cuento de la criada&quot;                    
+## [50] &quot;La Herencia&quot;</code></pre>
+</div>
+<div id="año-película" class="section level1">
+<h1>Año película</h1>
+<pre class="r"><code>target_anio &lt;- target_page %&gt;% html_nodes(xpath = &#39;//*[@id=&quot;main&quot;]/div/div[3]/div/div/div&#39;)
+anio_peliculas &lt;- target_anio %&gt;% html_nodes(&quot;h3.lister-item-header&quot;) %&gt;% html_nodes(&quot;span.lister-item-year&quot;) %&gt;% html_text()
+anio_peliculas</code></pre>
+<pre><code>##  [1] &quot;(2020)&quot;       &quot;(2020)&quot;       &quot;(2020)&quot;       &quot;(2018)&quot;       &quot;(2014– )&quot;    
+##  [6] &quot;(2018– )&quot;     &quot;(2020– )&quot;     &quot;(2010– )&quot;     &quot;(2020– )&quot;     &quot;(2005–2020)&quot; 
+## [11] &quot;(2020)&quot;       &quot;(2020)&quot;       &quot;(2020)&quot;       &quot;(2006–2021)&quot;  &quot;(2020– )&quot;    
+## [16] &quot;(2020– )&quot;     &quot;(2016– )&quot;     &quot;(2011– )&quot;     &quot;(I) (2019)&quot;   &quot;(2019– )&quot;    
+## [21] &quot;(2008–2013)&quot;  &quot;(2013– )&quot;     &quot;(2005–2020)&quot;  &quot;(2015– )&quot;     &quot;(I) (2012)&quot;  
+## [26] &quot;(2020)&quot;       &quot;(2020– )&quot;     &quot;(2020)&quot;       &quot;(1940)&quot;       &quot;(2020– )&quot;    
+## [31] &quot;(2020– )&quot;     &quot;(2009–2017)&quot;  &quot;(2003– )&quot;     &quot;(2018)&quot;       &quot;(2011– )&quot;    
+## [36] &quot;(1999– )&quot;     &quot;(2008–2014)&quot;  &quot;(1978)&quot;       &quot;(2020– )&quot;     &quot;(2020 Video)&quot;
+## [41] &quot;(2017–2020)&quot;  &quot;(2020– )&quot;     &quot;(I) (2020)&quot;   &quot;(2018– )&quot;     &quot;(2020– )&quot;    
+## [46] &quot;(2019)&quot;       &quot;(2017– )&quot;     &quot;(2017– )&quot;     &quot;(2017– )&quot;     &quot;(2020)&quot;</code></pre>
+</div>
+<div id="edad-recomendada" class="section level1">
+<h1>Edad recomendada</h1>
+<p>OJO que devuelve 45 resultados. Estudiar que pasa cuando no hay datos</p>
+<pre class="r"><code>target_edad &lt;- target_page %&gt;% html_nodes(xpath = &#39;//*[@id=&quot;main&quot;]/div/div[3]/div/div/div&#39;)
+edad_peliculas &lt;- target_edad %&gt;% html_nodes(&quot;p.text-muted&quot;) %&gt;% html_nodes(&quot;span.certificate&quot;) %&gt;% html_text()
+edad_peliculas</code></pre>
+<pre><code>##  [1] &quot;16&quot;    &quot;12&quot;    &quot;12&quot;    &quot;16&quot;    &quot;18&quot;    &quot;16&quot;    &quot;18&quot;    &quot;16&quot;    &quot;12&quot;   
+## [10] &quot;16&quot;    &quot;16&quot;    &quot;16&quot;    &quot;18&quot;    &quot;16&quot;    &quot;16&quot;    &quot;18&quot;    &quot;16&quot;    &quot;16&quot;   
+## [19] &quot;16&quot;    &quot;16&quot;    &quot;13&quot;    &quot;16&quot;    &quot;16&quot;    &quot;R&quot;     &quot;PG-13&quot; &quot;14&quot;    &quot;16&quot;   
+## [28] &quot;16&quot;    &quot;12&quot;    &quot;16&quot;    &quot;16&quot;    &quot;18&quot;    &quot;16&quot;    &quot;18&quot;    &quot;PG-13&quot; &quot;16&quot;   
+## [37] &quot;16&quot;    &quot;16&quot;    &quot;16&quot;    &quot;16&quot;    &quot;12&quot;    &quot;16&quot;    &quot;16&quot;    &quot;18&quot;    &quot;16&quot;</code></pre>
+</div>
+<div id="duracion-peliculas" class="section level1">
+<h1>Duracion peliculas</h1>
+<p>OJO que devuelve 42 resultados. Estudiar que pasa cuando no hay datos</p>
+<pre class="r"><code>target_duracion &lt;- target_page %&gt;% html_nodes(xpath = &#39;//*[@id=&quot;main&quot;]/div/div[3]/div/div/div&#39;)
+duracion_peliculas &lt;- target_duracion %&gt;% html_nodes(&quot;p.text-muted&quot;) %&gt;% html_nodes(&quot;span.runtime&quot;) %&gt;% html_text()
+duracion_peliculas</code></pre>
+<pre><code>##  [1] &quot;494 min&quot; &quot;129 min&quot; &quot;121 min&quot; &quot;572 min&quot; &quot;53 min&quot;  &quot;60 min&quot;  &quot;44 min&quot; 
+##  [8] &quot;60 min&quot;  &quot;44 min&quot;  &quot;90 min&quot;  &quot;138 min&quot; &quot;53 min&quot;  &quot;60 min&quot;  &quot;51 min&quot; 
+## [15] &quot;60 min&quot;  &quot;42 min&quot;  &quot;49 min&quot;  &quot;43 min&quot;  &quot;42 min&quot;  &quot;44 min&quot;  &quot;110 min&quot;
+## [22] &quot;137 min&quot; &quot;60 min&quot;  &quot;99 min&quot;  &quot;130 min&quot; &quot;43 min&quot;  &quot;60 min&quot;  &quot;97 min&quot; 
+## [29] &quot;60 min&quot;  &quot;60 min&quot;  &quot;45 min&quot;  &quot;91 min&quot;  &quot;103 min&quot; &quot;60 min&quot;  &quot;149 min&quot;
+## [36] &quot;124 min&quot; &quot;45 min&quot;  &quot;130 min&quot; &quot;60 min&quot;  &quot;70 min&quot;  &quot;60 min&quot;  &quot;111 min&quot;</code></pre>
+</div>
+<div id="generos-películas" class="section level1">
+<h1>Generos películas</h1>
+<pre class="r"><code>target_genero &lt;- target_page %&gt;% html_nodes(xpath = &#39;//*[@id=&quot;main&quot;]/div/div[3]/div/div/div&#39;)
+genero_peliculas &lt;- target_genero %&gt;% html_nodes(&quot;p.text-muted&quot;) %&gt;% html_nodes(&quot;span.genre&quot;) %&gt;% html_text()
+genero_peliculas</code></pre>
+<pre><code>##  [1] &quot;\nDrama, Horror, Mystery            &quot;   
+##  [2] &quot;\nDrama, History, Thriller            &quot; 
+##  [3] &quot;\nDrama, Mystery, Romance            &quot;  
+##  [4] &quot;\nDrama, Horror, Mystery            &quot;   
+##  [5] &quot;\nCrime, Drama, Thriller            &quot;   
+##  [6] &quot;\nAction, Crime, Drama            &quot;     
+##  [7] &quot;\nCrime, Drama, Mystery            &quot;    
+##  [8] &quot;\nDrama, Horror, Thriller            &quot;  
+##  [9] &quot;\nDrama, Fantasy, Horror            &quot;   
+## [10] &quot;\nDrama, Fantasy, Horror            &quot;   
+## [11] &quot;\nAction, Adventure, Drama            &quot; 
+## [12] &quot;\nAction, Thriller            &quot;         
+## [13] &quot;\nCrime, Drama, Thriller            &quot;   
+## [14] &quot;\nCrime, Drama, Mystery            &quot;    
+## [15] &quot;\nDrama, Thriller            &quot;          
+## [16] &quot;\nDrama, Fantasy, Sci-Fi            &quot;   
+## [17] &quot;\nDrama, Fantasy, Horror            &quot;   
+## [18] &quot;\nDrama, Horror, Thriller            &quot;  
+## [19] &quot;\nDrama, Sci-Fi, Thriller            &quot;  
+## [20] &quot;\nCrime, Drama, Horror            &quot;     
+## [21] &quot;\nCrime, Drama, Thriller            &quot;   
+## [22] &quot;\nCrime, Drama, Mystery            &quot;    
+## [23] &quot;\nCrime, Drama, Mystery            &quot;    
+## [24] &quot;\nDrama, Horror, Sci-Fi            &quot;    
+## [25] &quot;\nHorror, Mystery, Thriller            &quot;
+## [26] &quot;\nCrime, Drama, Horror            &quot;     
+## [27] &quot;\nDrama, Mystery, Thriller            &quot; 
+## [28] &quot;\nAction, Crime, Drama            &quot;     
+## [29] &quot;\nDrama, Mystery, Romance            &quot;  
+## [30] &quot;\nAction, Drama, Mystery            &quot;   
+## [31] &quot;\nAdventure, Drama, Fantasy            &quot;
+## [32] &quot;\nDrama, Fantasy, Horror            &quot;   
+## [33] &quot;\nAction, Crime, Drama            &quot;     
+## [34] &quot;\nCrime, Drama, Horror            &quot;     
+## [35] &quot;\nDrama, Sci-Fi, Thriller            &quot;  
+## [36] &quot;\nCrime, Drama, Mystery            &quot;    
+## [37] &quot;\nCrime, Drama, Thriller            &quot;   
+## [38] &quot;\nHorror, Thriller            &quot;         
+## [39] &quot;\nComedy, Drama, Mystery            &quot;   
+## [40] &quot;\nAction, Sci-Fi, Thriller            &quot; 
+## [41] &quot;\nCrime, Drama, Mystery            &quot;    
+## [42] &quot;\nCrime, Drama, Thriller            &quot;   
+## [43] &quot;\nDrama, Horror, Mystery            &quot;   
+## [44] &quot;\nCrime, Drama, Romance            &quot;    
+## [45] &quot;\nDrama, Thriller            &quot;          
+## [46] &quot;\nComedy, Crime, Drama            &quot;     
+## [47] &quot;\nCrime, Drama, Thriller            &quot;   
+## [48] &quot;\nAction, Crime, Mystery            &quot;   
+## [49] &quot;\nDrama, Sci-Fi, Thriller            &quot;  
+## [50] &quot;\nDrama, Mystery, Thriller            &quot;</code></pre>
+</div>
+<div id="puntuacion" class="section level1">
+<h1>Puntuacion</h1>
+<p>OJO que devuelve 48 resultados. Estudiar que pasa cuando no hay datos</p>
+<pre class="r"><code>target_puntuacion &lt;- target_page %&gt;% html_nodes(xpath = &#39;//*[@id=&quot;main&quot;]/div/div[3]/div/div/div&#39;)
+puntuacion_peliculas &lt;- target_puntuacion %&gt;% html_nodes(&quot;div.ratings-bar&quot;) %&gt;% html_nodes(&quot;div.inline-block&quot;) %&gt;% html_nodes(&quot;strong&quot;) %&gt;% html_text()
+puntuacion_peliculas</code></pre>
+<pre><code>##  [1] &quot;7.5&quot; &quot;7.9&quot; &quot;6.0&quot; &quot;8.7&quot; &quot;8.9&quot; &quot;8.5&quot; &quot;7.3&quot; &quot;8.2&quot; &quot;7.2&quot; &quot;8.4&quot; &quot;6.6&quot; &quot;6.1&quot;
+## [13] &quot;7.1&quot; &quot;8.6&quot; &quot;6.6&quot; &quot;7.9&quot; &quot;8.8&quot; &quot;8.0&quot; &quot;7.2&quot; &quot;7.6&quot; &quot;9.5&quot; &quot;8.0&quot; &quot;8.1&quot; &quot;6.9&quot;
+## [25] &quot;6.8&quot; &quot;6.2&quot; &quot;6.6&quot; &quot;6.2&quot; &quot;8.1&quot; &quot;6.7&quot; &quot;7.7&quot; &quot;7.8&quot; &quot;5.8&quot; &quot;8.8&quot; &quot;8.0&quot; &quot;8.6&quot;
+## [37] &quot;7.8&quot; &quot;5.6&quot; &quot;8.8&quot; &quot;6.3&quot; &quot;7.1&quot; &quot;7.8&quot; &quot;8.1&quot; &quot;7.9&quot; &quot;8.4&quot; &quot;8.4&quot; &quot;8.5&quot; &quot;5.5&quot;</code></pre>
+</div>
+<div id="descripción-películas-revisar" class="section level1">
+<h1>Descripción películas (REVISAR)</h1>
+<pre class="r"><code>target_descrip &lt;- target_page %&gt;% html_nodes(xpath = &#39;//*[@id=&quot;main&quot;]/div/div[3]/div/div/div&#39;)
+descrip_peliculas &lt;- target_descrip %&gt;% html_nodes(&quot;p.text-muted&quot;) %&gt;% html_nodes(&quot;span.genre&quot;) %&gt;% html_text()
+head(descrip_peliculas)</code></pre>
+<pre><code>## [1] &quot;\nDrama, Horror, Mystery            &quot;  
+## [2] &quot;\nDrama, History, Thriller            &quot;
+## [3] &quot;\nDrama, Mystery, Romance            &quot; 
+## [4] &quot;\nDrama, Horror, Mystery            &quot;  
+## [5] &quot;\nCrime, Drama, Thriller            &quot;  
+## [6] &quot;\nAction, Crime, Drama            &quot;</code></pre>
+</div>
+<div id="numero-de-votos-revisar" class="section level1">
+<h1>Numero de votos (REVISAR)</h1>
+<pre class="r"><code>target_votos &lt;- target_page %&gt;% html_nodes(xpath = &#39;//*[@id=&quot;main&quot;]/div/div[3]/div/div/div&#39;)
+votos_peliculas &lt;- target_votos %&gt;% html_nodes(&quot;p.sort-num_votes-visible&quot;) %&gt;% html_nodes(&quot;span&quot;) %&gt;% html_text()
+votos_peliculas</code></pre>
+<pre><code>##   [1] &quot;Votes:&quot;    &quot;43,637&quot;    &quot;Votes:&quot;    &quot;38,499&quot;    &quot;Votes:&quot;    &quot;12,575&quot;   
+##   [7] &quot;Votes:&quot;    &quot;167,446&quot;   &quot;Votes:&quot;    &quot;314,550&quot;   &quot;Votes:&quot;    &quot;40,355&quot;   
+##  [13] &quot;Votes:&quot;    &quot;26,479&quot;    &quot;Votes:&quot;    &quot;837,611&quot;   &quot;Votes:&quot;    &quot;21,576&quot;   
+##  [19] &quot;Votes:&quot;    &quot;381,543&quot;   &quot;Votes:&quot;    &quot;2,263&quot;     &quot;Votes:&quot;    &quot;14,632&quot;   
+##  [25] &quot;Votes:&quot;    &quot;66,399&quot;    &quot;Votes:&quot;    &quot;633,410&quot;   &quot;Votes:&quot;    &quot;700&quot;      
+##  [31] &quot;Votes:&quot;    &quot;31,387&quot;    &quot;Votes:&quot;    &quot;781,134&quot;   &quot;Votes:&quot;    &quot;271,786&quot;  
+##  [37] &quot;Votes:&quot;    &quot;4,768&quot;     &quot;Votes:&quot;    &quot;9,937&quot;     &quot;Votes:&quot;    &quot;1,408,343&quot;
+##  [43] &quot;Votes:&quot;    &quot;188,320&quot;   &quot;Votes:&quot;    &quot;155,463&quot;   &quot;Votes:&quot;    &quot;108,988&quot;  
+##  [49] &quot;Votes:&quot;    &quot;216,833&quot;   &quot;|&quot;         &quot;Gross:&quot;    &quot;$48.09M&quot;   &quot;Votes:&quot;   
+##  [55] &quot;397&quot;       &quot;Votes:&quot;    &quot;4,316&quot;     &quot;Votes:&quot;    &quot;2,587&quot;     &quot;Votes:&quot;   
+##  [61] &quot;121,140&quot;   &quot;|&quot;         &quot;Gross:&quot;    &quot;$4.36M&quot;    &quot;Votes:&quot;    &quot;5,853&quot;    
+##  [67] &quot;Votes:&quot;    &quot;277,031&quot;   &quot;Votes:&quot;    &quot;116,292&quot;   &quot;Votes:&quot;    &quot;5,052&quot;    
+##  [73] &quot;Votes:&quot;    &quot;424,429&quot;   &quot;Votes:&quot;    &quot;78,212&quot;    &quot;Votes:&quot;    &quot;252,888&quot;  
+##  [79] &quot;Votes:&quot;    &quot;226,574&quot;   &quot;|&quot;         &quot;Gross:&quot;    &quot;$47.00M&quot;   &quot;Votes:&quot;   
+##  [85] &quot;1,292&quot;     &quot;Votes:&quot;    &quot;260,842&quot;   &quot;Votes:&quot;    &quot;1,796&quot;     &quot;Votes:&quot;   
+##  [91] &quot;143,655&quot;   &quot;|&quot;         &quot;Gross:&quot;    &quot;$64.91M&quot;   &quot;Votes:&quot;    &quot;133,715&quot;  
+##  [97] &quot;Votes:&quot;    &quot;1,084&quot;     &quot;Votes:&quot;    &quot;407,288&quot;   &quot;|&quot;         &quot;Gross:&quot;   
+## [103] &quot;$165.36M&quot;  &quot;Votes:&quot;    &quot;174,989&quot;   &quot;Votes:&quot;    &quot;276,713&quot;   &quot;Votes:&quot;   
+## [109] &quot;163,275&quot;   &quot;Votes:&quot;    &quot;6,836&quot;</code></pre>
+</div>
+<div id="opciones-alternativas" class="section level1">
+<h1>Opciones alternativas</h1>
+<p>Si fallase lo anterior, se podría hacer mediante bucles. Problema: me da fallo si no existe ese datos, por lo que habría que hacer mucha limpieza</p>
+<p>Se basa en:</p>
 <p>Xpaths del titulo de la película:</p>
 <ul>
 <li>Relativo //*<span class="citation">[@id=&quot;main&quot;]</span>/div/div[3]/div/div[1]/div[3]/h3/a</li>
 <li>Completo: /html/body/div[3]/div/div[2]/div[3]/div[1]/div/div[3]/div/div[1]/div[3]/h3/a</li>
 </ul>
-<pre class="r"><code># Nombre pelicula
-nombre_peli &lt;- target_page %&gt;% html_nodes(xpath = &quot;/html/body/div[3]/div/div[2]/div[3]/div[1]/div/div[3]/div/div[1]/div[3]/h3/a&quot;) %&gt;% html_text()
-nombre_peli</code></pre>
+<pre class="r"><code>peli &lt;- target_page %&gt;% html_nodes(xpath = &#39;//*[@id=&quot;main&quot;]/div/div[3]/div/div[1]/div[3]/h3/a&#39;) %&gt;% html_text()
+peli</code></pre>
 <pre><code>## [1] &quot;La maldición de Bly Manor&quot;</code></pre>
-<p>Prueba para automatizar y sacarlos todos juntos</p>
-<pre class="r"><code>target &lt;- target_page %&gt;% html_nodes(xpath = &quot;/html/body/div[3]/div/div[2]/div[3]/div[1]/div/div[3]/div&quot;)
-target</code></pre>
-<pre><code>## {xml_nodeset (1)}
-## [1] &lt;div class=&quot;lister-list&quot;&gt;\n    &lt;div class=&quot;lister-item mode-advanced&quot;&gt;\n  ...</code></pre>
-<pre class="r"><code>titulos &lt;- target %&gt;% html_nodes(&quot;div.lister-item-content&quot;)
-titulos</code></pre>
-<pre><code>## {xml_nodeset (50)}
-##  [1] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-##  [2] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-##  [3] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-##  [4] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-##  [5] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-##  [6] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-##  [7] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-##  [8] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-##  [9] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-## [10] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-## [11] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-## [12] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-## [13] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-## [14] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-## [15] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-## [16] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-## [17] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-## [18] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-## [19] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-## [20] &lt;div class=&quot;lister-item-content&quot;&gt;\n&lt;h3 class=&quot;lister-item-header&quot;&gt;\n     ...
-## ...</code></pre>
+<pre class="r"><code>nombre_peliculas &lt;- c()
+anio_peliculas &lt;- c()
+duracion_peliculas &lt;- c()
+tags_peliculas &lt;- c()
+
+for(i in 1:50){
+        # Extracción películas
+        path_comun &lt;- &#39;//*[@id=&quot;main&quot;]/div/div[3]/div/div[&#39;
+        path_esp_peli &lt;- &#39;]/div[3]/h3/a&#39;
+        path_peliculas &lt;- paste(path_comun, i, path_esp_peli, sep = &quot;&quot;)
+        
+        peli &lt;- target_page %&gt;% html_nodes(xpath = path_peliculas) %&gt;% html_text()
+        nombre_peliculas &lt;- append(nombre_peliculas, peli)
+        
+        # Extracción años
+        path_anio &lt;- &#39;]/div[3]/h3/span[2]&#39;
+        path_esp_anio &lt;- paste(path_comun, i, path_anio, sep = &quot;&quot;)
+        
+        anio &lt;- target_page %&gt;% html_nodes(xpath = path_esp_anio) %&gt;% html_text()
+        anio_peliculas &lt;- append(anio_peliculas, anio)
+
+}
+nombre_peliculas</code></pre>
+<pre><code>##  [1] &quot;La maldición de Bly Manor&quot;                 
+##  [2] &quot;El juicio de los 7 de Chicago&quot;             
+##  [3] &quot;Rebeca&quot;                                    
+##  [4] &quot;La maldición de Hill House&quot;                
+##  [5] &quot;Fargo&quot;                                     
+##  [6] &quot;Mirzapur&quot;                                  
+##  [7] &quot;Ratched&quot;                                   
+##  [8] &quot;The Walking Dead&quot;                          
+##  [9] &quot;Territorio Lovecraft&quot;                      
+## [10] &quot;Sobrenatural&quot;                              
+## [11] &quot;La Revolución&quot;                             
+## [12] &quot;Salvaje&quot;                                   
+## [13] &quot;El diablo a todas horas&quot;                   
+## [14] &quot;Dexter&quot;                                    
+## [15] &quot;Roadkill&quot;                                  
+## [16] &quot;Raised by Wolves&quot;                          
+## [17] &quot;Stranger Things&quot;                           
+## [18] &quot;American Horror Story&quot;                     
+## [19] &quot;Hacia el lago&quot;                             
+## [20] &quot;Evil&quot;                                      
+## [21] &quot;Breaking Bad&quot;                              
+## [22] &quot;The Blacklist&quot;                             
+## [23] &quot;Mentes criminales&quot;                         
+## [24] &quot;Fear the Walking Dead&quot;                     
+## [25] &quot;Sinister&quot;                                  
+## [26] &quot;The Empty Man&quot;                             
+## [27] &quot;El tercer día&quot;                             
+## [28] &quot;Honest Thief&quot;                              
+## [29] &quot;Rebeca&quot;                                    
+## [30] &quot;Utopia&quot;                                    
+## [31] &quot;Apocalipsis&quot;                               
+## [32] &quot;Crónicas vampíricas&quot;                       
+## [33] &quot;Navy: Investigación criminal&quot;              
+## [34] &quot;El engaño&quot;                                 
+## [35] &quot;Black Mirror&quot;                              
+## [36] &quot;Ley y orden: Unidad de víctimas especiales&quot;
+## [37] &quot;Hijos de la anarquía&quot;                      
+## [38] &quot;La noche de Halloween&quot;                     
+## [39] &quot;The Flight Attendant&quot;                      
+## [40] &quot;Tremors: Shrieker Island&quot;                  
+## [41] &quot;Dark&quot;                                      
+## [42] &quot;Alguien tiene que morir&quot;                   
+## [43] &quot;El hombre invisible&quot;                       
+## [44] &quot;You&quot;                                       
+## [45] &quot;The Undoing&quot;                               
+## [46] &quot;Puñales por la espalda&quot;                    
+## [47] &quot;Ozark&quot;                                     
+## [48] &quot;La casa de papel&quot;                          
+## [49] &quot;El cuento de la criada&quot;                    
+## [50] &quot;La Herencia&quot;</code></pre>
+<pre class="r"><code>anio_peliculas</code></pre>
+<pre><code>##  [1] &quot;(2020)&quot;       &quot;(2020)&quot;       &quot;(2020)&quot;       &quot;(2018)&quot;       &quot;(2014– )&quot;    
+##  [6] &quot;(2018– )&quot;     &quot;(2020– )&quot;     &quot;(2010– )&quot;     &quot;(2020– )&quot;     &quot;(2005–2020)&quot; 
+## [11] &quot;(2020)&quot;       &quot;(2020)&quot;       &quot;(2020)&quot;       &quot;(2006–2021)&quot;  &quot;(2020– )&quot;    
+## [16] &quot;(2020– )&quot;     &quot;(2016– )&quot;     &quot;(2011– )&quot;     &quot;(I) (2019)&quot;   &quot;(2019– )&quot;    
+## [21] &quot;(2008–2013)&quot;  &quot;(2013– )&quot;     &quot;(2005–2020)&quot;  &quot;(2015– )&quot;     &quot;(I) (2012)&quot;  
+## [26] &quot;(2020)&quot;       &quot;(2020– )&quot;     &quot;(2020)&quot;       &quot;(1940)&quot;       &quot;(2020– )&quot;    
+## [31] &quot;(2020– )&quot;     &quot;(2009–2017)&quot;  &quot;(2003– )&quot;     &quot;(2018)&quot;       &quot;(2011– )&quot;    
+## [36] &quot;(1999– )&quot;     &quot;(2008–2014)&quot;  &quot;(1978)&quot;       &quot;(2020– )&quot;     &quot;(2020 Video)&quot;
+## [41] &quot;(2017–2020)&quot;  &quot;(2020– )&quot;     &quot;(I) (2020)&quot;   &quot;(2018– )&quot;     &quot;(2020– )&quot;    
+## [46] &quot;(2019)&quot;       &quot;(2017– )&quot;     &quot;(2017– )&quot;     &quot;(2017– )&quot;     &quot;(2020)&quot;</code></pre>
 </div>
 
 
