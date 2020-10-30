@@ -1,0 +1,45 @@
+---
+title: "Results IMDB"
+author: "jperezord & anahubel"
+date: "30/10/2020"
+output:
+  html_document:
+    toc: yes
+    toc_float: true
+    number_sections: true
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Contexto
+
+XXXXX
+
+# Título dataset
+
+
+# Descripción dataset y contenidos
+
+Estadísticas básicas, tipos, ....
+
+# Representación gráfica
+
+
+
+# Agradecimientos
+
+
+
+# Inspiración
+
+
+
+
+# Licencia
+
+
+
+# Dataset
