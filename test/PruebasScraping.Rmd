@@ -41,8 +41,16 @@ target_page <- read_html(target_url)
 
 ```{r}
 
-target_nombre <- target_page %>% html_nodes(xpath = '//*[@id="main"]/div/div[3]/div/div/div')
-nombre_peliculas <- target_nombre %>% html_nodes("h3.lister-item-header") %>% html_nodes("a") %>% html_text()
+target_nombre <- target_page %>% 
+        html_nodes(xpath = '//*[@id="main"]/div/div[3]/div/div/div')
+
+
+nombre_peliculas <- target_nombre %>% 
+        html_nodes("h3.lister-item-header") %>% 
+        html_nodes("a") %>% 
+        html_text()
+
+
 nombre_peliculas
 ```
 
@@ -50,7 +58,12 @@ nombre_peliculas
 
 ```{r}
 target_anio <- target_page %>% html_nodes(xpath = '//*[@id="main"]/div/div[3]/div/div/div')
-anio_peliculas <- target_anio %>% html_nodes("h3.lister-item-header") %>% html_nodes("span.lister-item-year") %>% html_text()
+
+anio_peliculas <- target_anio %>% 
+        html_nodes("h3.lister-item-header") %>% 
+        html_nodes("span.lister-item-year") %>% 
+        html_text()
+
 anio_peliculas
 ```
 
