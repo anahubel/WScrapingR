@@ -1,0 +1,159 @@
+---
+title: "PRAC1 Pruebas Scraping filmaffinity"
+author: "jperezord & anahubel"
+date: '`r format(Sys.Date(),"%e de %B, %Y")`'
+output:
+  html_document:
+    toc: yes
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Intro
+
+Documento para pruebas interactivas de scraping a la página filmaffinity
+
+# Carga librerías
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Carga librerias
+PACKAGES <- c("dplyr", "rvest", "ggplot2", "tibble", "knitr", "stringr")
+
+# En caso de no tenerlas instaladas, se descargarlas
+inst <- match(PACKAGES, .packages(all=TRUE))
+need <- which(is.na(inst))
+if (length(need) > 0) install.packages(PACKAGES[need], repos = "http://cran.us.r-project.org")
+
+# Cargamos las librerías
+lapply(PACKAGES, require, character.only=T)
+```
+
+
+# Carga página
+
+Vamos a descargar el top 30 películas de cada género (son las que se muestran por defecto). Para ello, creamos en primer lugar un vector con lo códigos de los géneros:
+
+- Acción: AC
+- Animación: AN
+- Aventuras: AV
+- Bélico: BE
+- Ciencia ficción: C-F
+- Cine negro: F-N
+- Comedia: CO
+- Drama: DR
+- Fantástico: FN
+- Infantil: INF
+- Intriga: INT
+- Musical: MU
+- Romance: RO
+- Terror: TE
+- Thriller: TH
+- Western: WE
+
+
+```{r}
+generos <- c("AC", "AN", "AV", "BE", "C-F", "F-N", "CO", "DR", "FAN", "INF", "INT", "MU", "RO", "TE", "TH", "WE")
+
+```
+
+De esta forma podemos hacer un bucle que genere los enlaces a consultar.
+Dichos enlaces siempre tienen la misma forma https://www.filmaffinity.com/es/topgen.php?genre=WE&fromyear=&toyear=&country=&nodoc&notvse por lo que únicamente habría que sustituir el genre=XXXX por cada posición del vetos.
+
+En la búsqueda indicamos que nos muestre cualquier año y que no queremos ni Series de TV (&nodoc) ni documentales (&notvse).
+
+```{r}
+url_comun_inicial <- "https://www.filmaffinity.com/es/topgen.php?genre="
+url_comun_final <- "&fromyear=&toyear=&country=&nodoc&notvse"
+
+pag_a_consultar <- c()
+
+for (i in generos){
+        url_i <- paste(url_comun_inicial, i, url_comun_final, sep = "")
+        pag_a_consultar <- append(pag_a_consultar, url_i)
+}
+
+pag_a_consultar
+```
+
+Para cada una de esas 16 páginas, haremos scraping para obtener el título de la película y el enlace a su página de filmaffinity, donde posteriormente obtendremos toda la información.
+
+Esta información se encuentra en (estas rutas se pueden obtener con el botón derecho del ratón encima de la línea del título, en copiar):
+
+* Xpath:
+    - //*[@id="top-movies"]/li[1]/ul/li[2]/div/div[2]/div[2]/a
+* Xpath completa:
+    - /html/body/div[4]/table/tbody/tr/td[2]/div[1]/div[4]/ul/li[1]/ul/li[2]/div/div[2]/div[2]/a
+
+
+Vamos a hacer el ejemplo de la página de Thriller:
+
+```{r}
+target_url <- pag_a_consultar[15]
+target_url
+
+target_page <- read_html(target_url)
+```
+
+```{r}
+nombre_path <- target_page %>%
+        html_nodes(xpath = '//*[@id="top-movies"]')
+
+posicion <- nombre_path %>%
+        html_nodes("li.position") %>%
+        html_text()
+
+nombre <- nombre_path %>%
+        html_nodes("li.content") %>%
+        html_nodes("div.mc-title") %>%
+        html_text()
+
+id_pelicula <- nombre_path %>%
+        html_nodes("li.content") %>%
+        html_nodes("div.mc-poster") %>%
+        html_nodes("a") %>%
+        html_attr("href")
+        
+BD_peliculas <- data.frame(
+        "genero" = "Thriller", 
+        "posicion" = posicion,
+        "nombre" = nombre,
+        "id_pelicula" = id_pelicula
+)
+
+BD_peliculas
+```
+
+
+Una vez que hacemos esto para cada uno de los 16 géneros, debemos acceder a las id_película de una en una para realizar un nuevo scraping y obtener la base de datos definitiva.
+
+
+# Bucle películas Thriller
+
+```{r}
+for (i in BD_peliculas$id_pelicula) {
+        # target_page <- read_html(i)
+}
+
+```
+
+
+```{r}
+target_url <- i
+
+target_page <- read_html(target_url)
+```
+
+
+```{r}
+titulo_original <- target_page %>%
+        html_node("dl.movie-info") %>%
+        html_nodes("dd") %>%
+        html_text()
+
+titulo_original
+```
+

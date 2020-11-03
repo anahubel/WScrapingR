@@ -1,5 +1,7 @@
 # PRÁCTICA 1: WEB SCRAPING
 
+# NOTA: NECESARIO ACTUALIZAR ENFOQUE HACIA FILMAFFINITY UNA VEZ DECIDIDO
+
 # Antecedentes
 
 El objetivo de este repositorio es dar respuesta a la práctica 1 de la asignatura Tipología y ciclo de vida de los datos, impartida dentro del Máster en Ciencia de Datos de la UOC. 
