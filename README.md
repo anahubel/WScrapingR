@@ -4,20 +4,19 @@
 
 # Antecedentes
 
-El objetivo de este repositorio es dar respuesta a la práctica 1 de la asignatura Tipología y ciclo de vida de los datos, impartida dentro del Máster en Ciencia de Datos de la UOC. 
+El objetivo de este repositorio es dar respuesta a la práctica 1 de la asignatura Tipología y ciclo de vida de los datos, impartida dentro del Máster en Ciencia de Datos de la UOC. El objetivo de esta actividad es crear un dataset a partir de los datos contenidos en una página web.
 
 
 # Descripción
 
 La actividad ha sido desarrollada de forma conjunta por Ana Hubel y Jaime Pérez Ordieres. 
 
-En ella se aplican técnicas de web scraping mediante el lenguaje de programación R para extraer datos de la página IMDB.
+En ella se aplican técnicas de web scraping mediante el lenguaje de programación R para extraer datos de la página filmaffinity.
 
-El objetivo final será la extracción de los datos características (nombre, año publicación, edad "pegi", duración, etiquetas y número de votos) de las películas y series actualmente en el Top 50 de Thriller más populares. De esta forma se espera generar un dataset limpio que será utilizado caracterizar y dar respuesta a una serie de preguntas, como por ejemplo:
+El objetivo final será la extracción de los datos características (nombre, género, posición) de las películas pertenecientes a los géneros acción, animación, aventuras, bélico, ciencia ficción, cine negro, comedia, drama, fantástico, infantil, intriga, musical, romance, terror, thriller y western. De esta forma se espera generar un dataset limpio que será utilizado caracterizar y dar respuesta a una serie de preguntas, como por ejemplo:
 
-* ¿Está relacionada la popularidad con el año de lanzamiento?
-* ¿Existe relación entre la puntuación y la duración de las películas?
-* ¿Qué otros géneres/etiquetas suelen ir acompañados de las películas de Thriller?
+* ¿Está relacionada la popularidad con el género de la película?
+*Añadir más preguntas cuando tengamos más variables*
 
 > Tanto las preguntas, como las respuestas al propio enunciado de la práctica, se encuentra recogidos en el archivo html generado por /WScraping/results.Rmd
 
